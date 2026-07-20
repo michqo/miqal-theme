@@ -1,0 +1,30 @@
+{
+  "name": "@miqal/theme",
+  "version": "0.1.0",
+  "description": "Miqal design system — shared Tailwind v4 theme, CSS variables, and design tokens",
+  "license": "MIT",
+  "keywords": [
+    "miqal",
+    "design-system",
+    "tailwindcss",
+    "css-variables",
+    "theme",
+    "oklch"
+  ],
+  "exports": {
+    "./theme.css": "./theme.css",
+    "./tokens.json": "./tokens.json"
+  },
+  "files": [
+    "theme.css",
+    "tokens.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/miqal/theme"
+  }
+}
