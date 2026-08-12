@@ -1,9 +1,12 @@
 # Miqal design system
 
+Date: 2026-08-11
+Status: Approved; scope revised 2026-08-12
+
 ## Goal
 
 Turn `@miqal/theme` from a shared collection of shadcn-compatible CSS variables into the
-authoritative, framework-neutral design system for Miqal apps. Preserve the portfolio's calm,
+authoritative CSS design system for Miqal React apps. Preserve the portfolio's calm,
 technical character while correcting inconsistencies, improving accessibility, and leaving each
 product free to choose the layout that best serves its users.
 
@@ -17,25 +20,31 @@ This project will:
 - establish one canonical token source and generate CSS from it;
 - publish the visual and interaction rules in `DESIGN.md`;
 - split mandatory foundations from optional atmospheric treatments;
-- define framework-neutral recipes with React and Svelte guidance;
+- define framework-neutral CSS recipes with React implementation guidance;
 - migrate the portfolio to consume the package directly;
-- validate the system in SleepCycle, Subnify, and `ms-web` before extracting runtime components;
+- validate the system in SleepCycle and Subnify before extracting runtime components;
 - add automated checks for token integrity, accessibility, package exports, and visual drift.
 
 This project will not initially:
 
-- ship a React or Svelte runtime component library;
+- ship a runtime component library;
 - force identical page layouts across products;
 - build a documentation website or Storybook;
 - add Figma integration;
 - redesign every Miqal app in one release.
 
+Svelte is intentionally unsupported. The package will not publish Svelte examples, run SvelteKit
+compatibility fixtures, promise Svelte compatibility, or migrate `ms_web`. Existing Svelte consumers
+may remain pinned to a previously validated package version, but they are outside this rollout and
+must not influence React-facing release decisions.
+
 ## Chosen approach
 
-Use an audited design constitution plus cross-framework recipes. Documentation alone would not
-prevent drift, while maintaining parallel React and Svelte component libraries before the patterns
-stabilize would add premature cost. Runtime components become eligible for extraction only after an
-equivalent pattern has succeeded in at least two apps and its accessibility contract is understood.
+Use an audited design constitution plus framework-neutral CSS recipes and React guidance.
+Documentation alone would not prevent drift, while introducing a runtime component library before
+patterns stabilize would add premature cost. React runtime components become eligible for extraction
+only after an equivalent pattern has succeeded in at least two React apps and its accessibility
+contract is understood.
 
 ## Design principles
 
@@ -93,8 +102,7 @@ The package will expose:
 - `theme.css` — convenience bundle and compatibility entry point;
 - `DESIGN.md` — published human- and agent-readable design constitution;
 - `recipes/` — component, layout, content, and state specifications;
-- `examples/react/` and `examples/svelte/` — reference snippets used for verification, not runtime
-  package exports.
+- `examples/react/` — reference snippets used for verification, not runtime package exports.
 
 `theme.css` will preserve the current all-in-one behavior for the first migration release by importing
 the new layers. New consumers should import `core.css` and opt into `canvas.css` and `motion.css`.
@@ -105,7 +113,8 @@ Removing compatibility behavior requires a later major version with migration no
 1. A maintainer edits and validates `tokens.json`.
 2. The generator creates the CSS entry points and documentation tables.
 3. CI compares generated output with the committed files and rejects drift.
-4. Apps import package entry points and bind framework-loaded fonts to the documented font variables.
+4. React apps import package entry points and bind framework-loaded fonts to the documented font
+   variables.
 5. App-level exceptions remain local and documented; they never modify the shared source implicitly.
 
 Invalid token structure, missing semantic pairs, duplicate names, out-of-gamut reference colors, or
@@ -183,7 +192,7 @@ every desktop control visually large.
 
 ### Icons
 
-Lucide is the default icon family in React and Svelte. Icons supplement visible labels unless the action
+Lucide is the default icon family in React. Icons supplement visible labels unless the action
 is universally recognized; icon-only controls require accessible names and tooltips where meaning is not
 immediate. Icons normally use 16px geometry inside controls and inherit semantic foreground colors.
 Emoji are content, not interface icons.
@@ -221,7 +230,7 @@ Each recipe states:
 - keyboard, screen-reader, and touch behavior;
 - responsive and reduced-motion behavior;
 - token dependencies;
-- React and Svelte implementation notes;
+- React implementation notes;
 - a concise do/don't example.
 
 Initial recipes cover:
@@ -257,9 +266,7 @@ suite applications where the shared relationship is useful.
    results, touch behavior, and optional canvas use.
 4. **Validate a richer React app.** Apply it to Subnify to test navigation, authentication, complex
    forms, tables, and denser workflows.
-5. **Validate Svelte and data display.** Apply it to `ms-web` to test framework-neutral recipes,
-   dashboard density, charts, and localization.
-6. **Evaluate component extraction.** Inventory remaining equivalent duplication and propose only the
+5. **Evaluate component extraction.** Inventory remaining equivalent duplication and propose only the
    components that now have stable contracts.
 
 Each migration is independently releasable. An app must not be partially switched between duplicated
@@ -267,10 +274,21 @@ local tokens and package tokens without a documented temporary boundary.
 
 ### Delivery boundary
 
-The first implementation plan covers step 1 only: the `miqal-theme` package, its design constitution,
-recipes, generation, and package-level verification. The portfolio and each application migration receive
-their own short design review and implementation plan when their turn begins. This keeps cross-repository
-changes independently testable and prevents discoveries in one product from blocking package delivery.
+Planning covers the `miqal-theme` package and three separate React consumer migrations: portfolio,
+SleepCycle, and Subnify. Each repository receives its own implementation plan and independently
+releasable change set. Implementation remains sequential: publish and verify the package before the
+portfolio migration, then use each completed consumer as evidence for the next. No repository may rely
+on unpublished local package state in its final release commit.
+
+Current rollout state:
+
+- `miqal-theme` publishes the hand-maintained `0.1.1` compatibility bundle.
+- Portfolio has an uncommitted direct-consumer migration in progress. Its package and CSS changes are
+  user-owned inputs that the migration plan must preserve.
+- SleepCycle still owns a duplicated local token block and does not depend on `@miqal/theme`.
+- Subnify consumes `0.1.1` but locally overrides primary pairs to correct package color defects. Its
+  migration removes those overrides only after the corrected package passes contrast verification.
+- `ms_web` remains untouched and outside compatibility, migration, and release verification scope.
 
 ## Verification
 
@@ -280,8 +298,7 @@ The package will include automated checks for:
 - deterministic generation and a clean generated-file diff;
 - color conversion and required contrast pairs;
 - expected package exports and packaged files;
-- a minimal Next.js consumer build;
-- a minimal SvelteKit consumer build.
+- a minimal Next.js consumer build.
 
 Migration verification includes:
 
@@ -298,11 +315,11 @@ corrective documentation and non-semantic implementation fixes use a patch versi
 
 ## Success criteria
 
-- A new React or Svelte Miqal app can adopt the visual foundation without copying theme variables.
+- A new React Miqal app can adopt the visual foundation without copying theme variables.
 - Humans and coding agents can determine the intended Miqal treatment from `DESIGN.md` and recipes.
 - The portfolio consumes `@miqal/theme` rather than maintaining a theme fork.
 - Semantic light and dark color pairs meet the documented contrast thresholds.
 - Dense desktop UI remains compact while touch layouts remain usable.
-- SleepCycle, Subnify, and `ms-web` look recognizably related without sharing page composition.
+- SleepCycle and Subnify look recognizably related to the portfolio without sharing page composition.
 - Optional atmosphere, app-level exceptions, and compatibility behavior have explicit boundaries.
 - No runtime component library is introduced before cross-app evidence justifies it.
