@@ -133,5 +133,5 @@ No environment file, credentials, app deployment, or remote push is included.
 | portfolio | `c20419d` |
 | sleep-cycle | `cc6fc9f` |
 | obedy | `6b705fa` |
-| ms_web | `ea2fa76` |
+| ms_web | `9a49f66` |
 | subnify | `a94d0ea` |
