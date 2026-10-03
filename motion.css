@@ -1,0 +1,20 @@
+/* Generated from tokens.json by scripts/generate.mjs. Do not edit. */
+
+:root {
+  --motion-feedback: 180ms;
+  --motion-overlay: 200ms;
+  --motion-layout: 240ms;
+  --motion-exit: 120ms;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+.miqal-motion-feedback { transition-property: color, background-color, border-color, opacity; transition-duration: var(--motion-feedback); transition-timing-function: var(--motion-ease); }
+.miqal-motion-overlay { transition-property: opacity, transform; transition-duration: var(--motion-overlay); transition-timing-function: var(--motion-ease); }
+.miqal-motion-layout { transition-property: transform; transition-duration: var(--motion-layout); transition-timing-function: var(--motion-ease); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

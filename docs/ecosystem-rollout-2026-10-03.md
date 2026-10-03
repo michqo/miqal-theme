@@ -1,7 +1,9 @@
 # Miqal ecosystem rollout
 
-Prepared: 2026-10-03. Status: ready for implementation planning; package and
-consumer migrations have not started.
+Updated: 2026-10-03. Status: the `0.2.0` foundation is implemented and verified.
+Portfolio consumes a packed candidate locally with visual parity. Registry
+publication and production consumer commits are pending; other app migrations
+have not started. See [verification](verification-0.2.0.md).
 
 ## Reference and decisions
 
@@ -24,8 +26,8 @@ color contracts, package verification, accessible interactions, and independent
 consumer migrations. The older Subnify migration plan also needs its visual
 assumptions reconciled before implementation.
 
-The current package remains `@miqal/theme@0.1.1`. This preparation does not
-change its public exports, published behavior, or any app dependency.
+The registry release remains `@miqal/theme@0.1.1`. This repository prepares
+`0.2.0`; existing consumers remain on their installed version until migrated.
 
 ## Shared appearance
 
@@ -95,6 +97,10 @@ Completion: a packed release candidate is installable in both frameworks, its
 core renders the approved palette without global decoration, and contrast and
 package checks pass. Existing `0.1.1` consumers keep working until migrated.
 
+Status: complete locally. Generated CSS, contrast contracts, packed exports,
+and both framework fixtures pass. Light desktop and dark 320px galleries pass
+the accessibility audits and keyboard checks recorded in verification.
+
 ## Phase 2: Migrate Portfolio without visual drift
 
 1. Capture light/dark reference screenshots from the committed portfolio in
@@ -112,6 +118,11 @@ package checks pass. Existing `0.1.1` consumers keep working until migrated.
 
 Completion: the package owns reusable foundations and the portfolio remains
 visually equivalent to the approved reference.
+
+Status: verified locally using the packed `0.2.0` candidate. EN/SK, light/dark,
+desktop/mobile geometry, fonts, and colors match the reference. Lint, TypeScript,
+and the production build pass. The temporary tarball dependency must be replaced
+with the registry release before committing this consumer migration.
 
 ## Phase 3: Migrate Sleep Cycle, then Obedy
 
@@ -172,7 +183,7 @@ failures separately from migration regressions.
 Use a packed package for local integration verification. Production consumer
 commits must reference the verified registry release rather than `file:` or
 link state. Package publication and app deployment are separate delivery steps;
-this preparation neither publishes nor deploys anything.
+no publication or deployment has been performed.
 
 Roll out one consumer at a time so each can be reverted independently. Finish
 with a search for duplicated semantic tokens, conflicting font bindings, and

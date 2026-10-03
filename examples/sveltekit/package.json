@@ -1,0 +1,1 @@
+{ "name": "miqal-sveltekit-fixture", "private": true, "type": "module", "dependencies": { "@miqal/theme": "0.2.0", "@sveltejs/kit": "^2.22.3", "@sveltejs/adapter-auto": "^6", "@sveltejs/vite-plugin-svelte": "^5", "svelte": "^5", "vite": "^7", "tailwindcss": "^4", "@tailwindcss/vite": "^4" } }

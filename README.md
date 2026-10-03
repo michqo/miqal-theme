@@ -1,96 +1,92 @@
 # @miqal/theme
 
-Tailwind v4 design tokens + base styles for Miqal apps. Next.js (shadcn/ui) and SvelteKit (shadcn-svelte).
+A CSS foundation for Miqal's Next.js and SvelteKit utilities: warm paper and ink,
+a teal identity, Geist font roles, accessible controls, and a plain canvas.
+The 0.2.0 release candidate follows the portfolio approved on 2026-10-03.
 
-## Upcoming ecosystem foundation
+## Install and import
 
-The portfolio design approved on 2026-10-03 is the reference for the next shared
-foundation. See the [ecosystem rollout plan](docs/ecosystem-rollout-2026-10-03.md)
-and its [observed token snapshot](docs/portfolio-baseline.tokens.json). This plan
-updates the older 0.2 visual assumptions and includes both Next.js and SvelteKit.
-The implementation documented below remains the current `0.1.1` behavior.
-
-## Install
-
-```bash
-npm install @miqal/theme
-```
-
-## Use
+Install the verified registry release when available. For local verification,
+use the packed candidate rather than publishing or linking source files.
 
 ```css
 /* app/globals.css (Next.js) or src/app.css (SvelteKit) */
-@import 'tailwindcss';
-@import '@miqal/theme/theme.css';
+@import "tailwindcss";
+@import "@miqal/theme/core.css";
 ```
 
-That's it. All tokens (`bg-primary`, `text-foreground`, `rounded-lg`, etc.) work immediately. Body gets dot-grid background + blue ambient gradients. `.dark` class triggers dark mode.
+Core exports semantic Tailwind v4 colors, radius aliases, font roles, visible
+focus, selection, and reduced-motion defaults. It adds no gradients, dot grid,
+blinking caret, font download, or framework runtime component.
 
-### Fonts
+## Fonts
 
-**Next.js** — `app/layout.tsx`:
-```tsx
-import { Inter, JetBrains_Mono } from 'next/font/google';
+Apps load Geist and Geist Mono. Bind the package roles on the element where
+those loader variables exist; defining aliases on an ancestor can resolve the
+fallback before the descendant's font variables are available.
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains-mono' });
+For Next.js, keep your existing next/font loaders. If their variables are
+applied to body:
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={`${inter.variable} ${mono.variable}`}>
-      <body>{children}</body>
-    </html>
-  );
+```css
+body {
+  --miqal-font-sans: var(--font-geist-sans);
+  --miqal-font-mono: var(--font-geist-mono);
 }
 ```
 
-**SvelteKit** — `src/app.html`:
-```html
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet">
+For SvelteKit, load fonts through your app's chosen strategy. The default roles
+use named Geist / Geist Mono with system fallbacks. Override
+`--miqal-font-sans` and `--miqal-font-mono` if using differently named local
+font faces. Theme selection is still controlled by your app's .dark class on
+html; core does not persist preferences or implement a toggle.
+
+## Optional layers and compatibility
+
+- `canvas.css`: explicit `.miqal-canvas` / `.miqal-canvas-quiet` treatments;
+  importing this file alone does not decorate body.
+- `motion.css`: duration/easing tokens and transition utilities.
+- `theme.css`: compatibility bundle with legacy global canvas, animation
+  utilities, and Inter / JetBrains Mono bindings. Use core.css when migrating
+  to the new design. Existing 0.1.x consumers remain on their installed version.
+
+Bind theme toggles, language menus, and task behavior in each app. Shared CSS
+does not replace accessible control semantics or product-specific layouts.
+
+## Tokens and ownership
+
+`tokens.json` is the only hand-edited source of shared token values. CSS and
+[DESIGN.md](DESIGN.md) are generated and checked in; consumers need no generation
+step. Package and token versions must match. Canonical colors use OKLCH, and hex
+approximations are generated through sRGB conversion rather than maintained by
+hand. Essential form boundaries use the stronger input role; decorative
+dividers use border. App identity colors do not encode status meaning.
+
+Products retain their composition, density, copy, navigation, and visualizations.
+The portfolio sketch and contact treatment are local design, not global widgets.
+
+## Development and verification
+
+```sh
+npm ci --ignore-scripts
+npm run generate
+npm test
+npm run verify:package
 ```
 
-Override fonts by redefining `--font-inter` / `--font-jetbrains-mono` anywhere after the import.
+Tests cover semantic contrast, alpha compositing, alias errors, approved token
+parity, deterministic artifacts, Tailwind compilation, and tarball exports.
+Run `npm run verify:consumers` in the ecosystem checkout to build packed-package
+Next.js and SvelteKit fixtures using the installed Portfolio / Weather Station
+dependencies. Override `MIQAL_NEXT_CONSUMER` / `MIQAL_SVELTE_CONSUMER` to use
+other installed consumer directories. These fixtures are development-only and
+are excluded from the published package.
 
-### Dark mode
+Before release, compare Portfolio in both languages/themes at desktop and
+mobile widths. Review gallery controls, focused states, floating layers, and
+chart/status roles. After publication, pin consumer commits to the registry
+release and keep app migrations independently reversible.
 
-Theme watches `.dark` on `<html>`. Add a toggle:
-
-- Next.js: [`next-themes`](https://github.com/pacocoursey/next-themes) — `<ThemeProvider attribute="class">`
-- SvelteKit: [`mode-watcher`](https://github.com/svecosystem/mode-watcher) — `<ModeWatcher />`
-
-## Tokens
-
-Primary hue: **212** (blue). Canonical values in `tokens.json`.
-
-| Token | Light | Dark |
-|---|---|---|
-| `--primary` | `oklch(0.55 0.18 212)` ≈ #2563eb | `oklch(0.72 0.17 212)` ≈ #60a5fa |
-| `--background` | `oklch(1 0 0)` ≈ #fff | `oklch(0.145 0 0)` ≈ #1c1c1d |
-| `--foreground` | `oklch(0.145 0 0)` ≈ #1c1c1d | `oklch(0.985 0 0)` ≈ #fafafa |
-| `--card` | `oklch(1 0 0)` ≈ #fff | `oklch(0.205 0 0)` ≈ #28282a |
-| `--muted` | `oklch(0.97 0 0)` ≈ #f5f5f5 | `oklch(0.269 0 0)` ≈ #343437 |
-| `--border` | `oklch(0.922 0 0)` ≈ #e4e4e7 | `oklch(1 0 0 / 10%)` |
-| `--ring` | `oklch(0.65 0.14 212)` ≈ #60a5fa | `oklch(0.55 0.15 212)` ≈ #3b82f6 |
-| `--radius` | `0.75rem` | `0.75rem` |
-| `--destructive` | `oklch(0.58 0.22 27)` ≈ #dc2626 | `oklch(0.704 0.191 22)` ≈ #ef4444 |
-
-Radius scale: `sm` 0.45rem → `md` 0.6rem → `lg` 0.75rem → `xl` 1.05rem → `2xl` 1.35rem → `3xl` 1.65rem → `4xl` 1.95rem.
-
-## Local dev
-
-```bash
-npm link                    # in this repo
-npm link @miqal/theme       # in consuming project
-```
-
-Or:
-
-```json
-"dependencies": { "@miqal/theme": "file:../miqal-theme" }
-```
-
-## Publish
-
-```bash
-npm publish --access public
-```
+See CHANGELOG.md for the migration. The repository's
+`docs/ecosystem-rollout-2026-10-03.md` records the staged rollout and original
+reference; it is development documentation and excluded from the package.
