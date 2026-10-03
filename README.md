@@ -2,6 +2,14 @@
 
 Tailwind v4 design tokens + base styles for Miqal apps. Next.js (shadcn/ui) and SvelteKit (shadcn-svelte).
 
+## Upcoming ecosystem foundation
+
+The portfolio design approved on 2026-10-03 is the reference for the next shared
+foundation. See the [ecosystem rollout plan](docs/ecosystem-rollout-2026-10-03.md)
+and its [observed token snapshot](docs/portfolio-baseline.tokens.json). This plan
+updates the older 0.2 visual assumptions and includes both Next.js and SvelteKit.
+The implementation documented below remains the current `0.1.1` behavior.
+
 ## Install
 
 ```bash
