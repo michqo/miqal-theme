@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — release candidate
+## 0.2.0 — 2026-10-03
 
 - Add generated `core.css` with the approved warm portfolio palette, Geist font
   roles, app identity swatches, status/chart roles, visible focus, and reduced

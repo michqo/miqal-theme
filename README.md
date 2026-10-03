@@ -2,12 +2,12 @@
 
 A CSS foundation for Miqal's Next.js and SvelteKit utilities: warm paper and ink,
 a teal identity, Geist font roles, accessible controls, and a plain canvas.
-The 0.2.0 release candidate follows the portfolio approved on 2026-10-03.
+The published 0.2.0 release follows the portfolio approved on 2026-10-03.
 
 ## Install and import
 
-Install the verified registry release when available. For local verification,
-use the packed candidate rather than publishing or linking source files.
+Install the verified registry release: `pnpm add @miqal/theme@0.2.0 --save-exact`.
+For future local changes, validate a packed candidate before publishing it.
 
 ```css
 /* app/globals.css (Next.js) or src/app.css (SvelteKit) */
