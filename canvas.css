@@ -1,7 +1,7 @@
 /* Generated from tokens.json by scripts/generate.mjs. Do not edit. */
 
 :root { --miqal-canvas-dot: oklch(0 0 0 / 0.06); --miqal-canvas-glow: oklch(0.43 0.12 212 / 0.10); }
-.dark { --miqal-canvas-dot: oklch(1 0 0 / 0.05); --miqal-canvas-glow: oklch(0.72 0.17 212 / 0.14); }
+.dark, [data-theme="dark"] { --miqal-canvas-dot: oklch(1 0 0 / 0.05); --miqal-canvas-glow: oklch(0.72 0.17 212 / 0.14); }
 .miqal-canvas, .miqal-canvas-quiet {
   background-image: radial-gradient(ellipse 80% 60% at 80% 0%, var(--miqal-canvas-glow), transparent 65%), radial-gradient(var(--miqal-canvas-dot) 1px, transparent 1px);
   background-size: 100% 100%, 28px 28px;

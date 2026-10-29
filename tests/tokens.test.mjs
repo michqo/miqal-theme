@@ -46,6 +46,24 @@ test("generated artifacts are deterministic and match the committed files", () =
   for (const [name, css] of first) assert.equal(css, readFileSync(new URL(name, root), "utf8"), name);
 });
 
+test("sRGB export resolves all aliases and preserves translucent colors", () => {
+  const srgb = JSON.parse(renderArtifacts(tokens).get("tokens.srgb.json"));
+  assert.equal(srgb.name, tokens.name);
+  assert.equal(srgb.version, tokens.version);
+  assert.equal(srgb.colorSpace, "srgb");
+  for (const mode of ["light", "dark"]) {
+    assert.deepEqual(Object.keys(srgb.colors[mode]), Object.keys(tokens.colors[mode]));
+    for (const value of Object.values(srgb.colors[mode])) {
+      assert.match(value, /^(#[\da-f]{6}|rgba\([\d., ]+\))$/);
+    }
+    assert.equal(srgb.colors[mode]["card-foreground"], srgb.colors[mode].foreground);
+    assert.equal(srgb.colors[mode]["sidebar-ring"], srgb.colors[mode].ring);
+  }
+  assert.equal(srgb.colors.light.background, "#fbf7f1");
+  assert.equal(srgb.colors.light.primary, "#005f76");
+  assert.equal(srgb.colors.dark.border, "rgba(255, 255, 255, 0.1)");
+});
+
 test("core is undecorated; optional layers and legacy fonts are explicit", () => {
   const files = renderArtifacts(tokens), core = files.get("core.css");
   assert.doesNotMatch(core, /background-image|@keyframes|animate-blink|@import/);
@@ -55,4 +73,66 @@ test("core is undecorated; optional layers and legacy fonts are explicit", () =>
   assert.doesNotMatch(files.get("canvas.css"), /\bbody\b/);
   assert.match(files.get("theme.css"), /var\(--font-inter,/);
   assert.match(files.get("theme.css"), /var\(--font-jetbrains-mono,/);
+});
+
+test("type, density, focus, spacing and layer contracts reject invalid systems", () => {
+  for (const [mutate, expected] of [
+    [copy => { delete copy.typography.scale.body; }, /Invalid type scale/],
+    [copy => { copy.typography.scale.caption.size = "0.5rem"; }, /Invalid type scale/],
+    [copy => { copy.space[4] = "2rem"; }, /Invalid spacing step/],
+    [copy => { copy.density.compact.controlHeight = "1rem"; }, /Invalid density target/],
+    [copy => { copy.interaction.touchTarget = "2rem"; }, /Invalid interaction tokens/],
+    [copy => { copy.interaction.focusWidth = "0px"; }, /Invalid interaction tokens/],
+    [copy => { copy.layers.dialog = copy.layers.overlay; }, /Invalid layer order/],
+    [copy => { copy.shadows.light.md = "none; color: red"; }, /Invalid shadow/],
+  ]) {
+    const copy = structuredClone(tokens); mutate(copy);
+    assert.throws(() => validateTokens(copy), expected);
+  }
+});
+
+test("selected and hovered states keep text contrast in both themes", () => {
+  const lowHover = structuredClone(tokens); lowHover.colors.light["primary-hover"] = "{primary-foreground}";
+  assert.throws(() => validateTokens(lowHover), /Contrast contracts failed/);
+  const missing = structuredClone(tokens);
+  missing.accessibility.contracts = missing.accessibility.contracts.filter(contract => contract.background !== "surface-selected");
+  assert.throws(() => validateTokens(missing), /Missing contrast contract/);
+});
+
+test("system primitives are opt-in and use runtime tokens across states", () => {
+  const files = renderArtifacts(tokens);
+  assert.doesNotMatch(files.get("core.css"), /\.miqal-button|\.miqal-input|\.miqal-menu/);
+  assert.match(files.get("system.css"), /@import "\.\/components.css"/);
+  const components = files.get("components.css");
+  for (const state of ["aria-invalid", "aria-busy", "aria-disabled", "data-highlighted", "data-disabled", "pointer: coarse", "forced-colors: active"]) assert.ok(components.includes(state), state);
+  assert.match(components, /min-block-size: var\(--miqal-touch-target\)/);
+  assert.match(files.get("core.css"), /\[data-theme="dark"\]/);
+  assert.match(files.get("core.css"), /--miqal-shadow-md:/);
+});
+
+test("app accent themes cover every accent role and keep contrast in both themes", () => {
+  for (const [mutate, expected] of [
+    [copy => { delete copy.appThemes.subnify.dark.ring; }, /Expected accent roles in app theme subnify.dark/],
+    [copy => { copy.appThemes.subnify.light.border = "oklch(0.5 0 0)"; }, /Expected accent roles/],
+    [copy => { copy.appThemes.unknown = structuredClone(copy.appThemes.subnify); }, /Unknown app theme: unknown/],
+    [copy => { copy.appThemes.obedy.light.primary = "oklch(0.7 0.12 50)"; }, /obedy.light.primary on background/],
+    [copy => { copy.appThemes.sleep.dark["accent-foreground"] = "{accent}"; }, /Contrast contracts failed/],
+  ]) {
+    const copy = structuredClone(tokens); mutate(copy);
+    assert.throws(() => validateTokens(copy), expected);
+  }
+});
+
+test("app accent scopes redeclare aliases and win over the dark palette", () => {
+  const core = renderArtifacts(tokens).get("core.css");
+  for (const app of Object.keys(tokens.appThemes)) {
+    const light = core.match(new RegExp(`^\\[data-app="${app}"\\] \\{([^}]*)\\}`, "m"))?.[1];
+    assert.ok(light, app);
+    for (const role of ["--primary:", "--ring:", "--sidebar-primary: var(--primary)", "--sidebar-ring: var(--ring)", "--surface-selected: var(--accent)"]) assert.ok(light.includes(role), `${app} ${role}`);
+    assert.doesNotMatch(light, /--(background|secondary|chart-1|success):/);
+    for (const selector of [`.dark [data-app="${app}"]`, `.dark[data-app="${app}"]`, `[data-theme="dark"] [data-app="${app}"]`]) assert.ok(core.includes(selector), selector);
+  }
+  assert.ok(core.indexOf("[data-app=") > core.indexOf('.dark, [data-theme="dark"] {'));
+  const srgb = JSON.parse(renderArtifacts(tokens).get("tokens.srgb.json"));
+  assert.equal(srgb.appThemes.subnify.light.ring, srgb.appThemes.subnify.light.primary);
 });

@@ -1,0 +1,199 @@
+{
+  "name": "miqal",
+  "version": "0.3.0",
+  "colorSpace": "srgb",
+  "colors": {
+    "light": {
+      "background": "#fbf7f1",
+      "foreground": "#251e16",
+      "card": "#fefcf8",
+      "card-foreground": "#251e16",
+      "popover": "#fefcf8",
+      "popover-foreground": "#251e16",
+      "primary": "#005f76",
+      "primary-foreground": "#eafcff",
+      "secondary": "#efebe2",
+      "secondary-foreground": "#251e16",
+      "muted": "#efebe2",
+      "muted-foreground": "#635c56",
+      "accent": "#d9f4fa",
+      "accent-foreground": "#00161c",
+      "border": "#ddd9cf",
+      "input": "#7e7a70",
+      "ring": "#005f76",
+      "app-weather": "#006166",
+      "app-subnify": "#345f95",
+      "app-sleep": "#6f4c87",
+      "app-obedy": "#944812",
+      "destructive": "#b02b27",
+      "destructive-foreground": "#fdfcf8",
+      "success": "#286037",
+      "warning": "#7b4c00",
+      "info": "#2b568b",
+      "chart-1": "#006166",
+      "chart-2": "#345f95",
+      "chart-3": "#6f4c87",
+      "chart-4": "#944812",
+      "chart-5": "#286037",
+      "sidebar": "#fefcf8",
+      "sidebar-foreground": "#251e16",
+      "sidebar-primary": "#005f76",
+      "sidebar-primary-foreground": "#eafcff",
+      "sidebar-accent": "#d9f4fa",
+      "sidebar-accent-foreground": "#00161c",
+      "sidebar-border": "#ddd9cf",
+      "sidebar-ring": "#005f76",
+      "success-foreground": "#fdfcf8",
+      "warning-foreground": "#fdfcf8",
+      "info-foreground": "#fdfcf8",
+      "primary-hover": "#004c5e",
+      "surface-subtle": "#efebe2",
+      "surface-hover": "#efebe2",
+      "surface-selected": "#d9f4fa",
+      "overlay": "rgba(16, 12, 9, 0.48)",
+      "app-filevault": "#2d5b3f"
+    },
+    "dark": {
+      "background": "#161310",
+      "foreground": "#eeebe4",
+      "card": "#211d1a",
+      "card-foreground": "#eeebe4",
+      "popover": "#211d1a",
+      "popover-foreground": "#eeebe4",
+      "primary": "#00bee2",
+      "primary-foreground": "#001017",
+      "secondary": "#27272a",
+      "secondary-foreground": "#fafafa",
+      "muted": "#262626",
+      "muted-foreground": "#aeaaa2",
+      "accent": "#002f37",
+      "accent-foreground": "#b7f0fc",
+      "border": "rgba(255, 255, 255, 0.1)",
+      "input": "#726e67",
+      "ring": "#0086a4",
+      "app-weather": "#53c1c7",
+      "app-subnify": "#89b7f3",
+      "app-sleep": "#c8a2e4",
+      "app-obedy": "#f5a06f",
+      "destructive": "#ff6467",
+      "destructive-foreground": "#161310",
+      "success": "#7fc08c",
+      "warning": "#e8a95c",
+      "info": "#89b7f3",
+      "chart-1": "#53c1c7",
+      "chart-2": "#89b7f3",
+      "chart-3": "#c8a2e4",
+      "chart-4": "#f5a06f",
+      "chart-5": "#7fc08c",
+      "sidebar": "#211d1a",
+      "sidebar-foreground": "#eeebe4",
+      "sidebar-primary": "#00bee2",
+      "sidebar-primary-foreground": "#001017",
+      "sidebar-accent": "#002f37",
+      "sidebar-accent-foreground": "#b7f0fc",
+      "sidebar-border": "rgba(255, 255, 255, 0.1)",
+      "sidebar-ring": "#0086a4",
+      "success-foreground": "#161310",
+      "warning-foreground": "#161310",
+      "info-foreground": "#161310",
+      "primary-hover": "#40cbe4",
+      "surface-subtle": "#262626",
+      "surface-hover": "#27272a",
+      "surface-selected": "#002f37",
+      "overlay": "rgba(2, 2, 1, 0.72)",
+      "app-filevault": "#7fc08c"
+    }
+  },
+  "appThemes": {
+    "weather": {
+      "light": {
+        "primary": "#006166",
+        "primary-foreground": "#eafdfe",
+        "primary-hover": "#004c50",
+        "ring": "#006166",
+        "accent": "#d8f5f6",
+        "accent-foreground": "#001718"
+      },
+      "dark": {
+        "primary": "#53c1c7",
+        "primary-foreground": "#001113",
+        "primary-hover": "#7cced2",
+        "ring": "#00858d",
+        "accent": "#003033",
+        "accent-foreground": "#b6f1f4"
+      }
+    },
+    "subnify": {
+      "light": {
+        "primary": "#345f95",
+        "primary-foreground": "#f0f9ff",
+        "primary-hover": "#264b7a",
+        "ring": "#345f95",
+        "accent": "#e1f0ff",
+        "accent-foreground": "#051223"
+      },
+      "dark": {
+        "primary": "#89b7f3",
+        "primary-foreground": "#000b1f",
+        "primary-hover": "#a1c7f8",
+        "ring": "#3d73b6",
+        "accent": "#172a41",
+        "accent-foreground": "#cae7ff"
+      }
+    },
+    "sleep": {
+      "light": {
+        "primary": "#6f4c87",
+        "primary-foreground": "#fdf5ff",
+        "primary-hover": "#593b6f",
+        "ring": "#6f4c87",
+        "accent": "#f5e9fe",
+        "accent-foreground": "#170c1f"
+      },
+      "dark": {
+        "primary": "#c8a2e4",
+        "primary-foreground": "#12051a",
+        "primary-hover": "#d4b6eb",
+        "ring": "#875ca5",
+        "accent": "#30223b",
+        "accent-foreground": "#f1daff"
+      }
+    },
+    "obedy": {
+      "light": {
+        "primary": "#944812",
+        "primary-foreground": "#fff5ed",
+        "primary-hover": "#7b3702",
+        "ring": "#944812",
+        "accent": "#ffe9dd",
+        "accent-foreground": "#1f0b02"
+      },
+      "dark": {
+        "primary": "#f5a06f",
+        "primary-foreground": "#1b0400",
+        "primary-hover": "#fdb48c",
+        "ring": "#a85a28",
+        "accent": "#3c2111",
+        "accent-foreground": "#ffdac2"
+      }
+    },
+    "filevault": {
+      "light": {
+        "primary": "#2d5b3f",
+        "primary-foreground": "#effdf3",
+        "primary-hover": "#20462f",
+        "ring": "#2d5b3f",
+        "accent": "#e0f5e6",
+        "accent-foreground": "#021709"
+      },
+      "dark": {
+        "primary": "#7fc08c",
+        "primary-foreground": "#001002",
+        "primary-hover": "#99cda3",
+        "ring": "#33854a",
+        "accent": "#15301b",
+        "accent-foreground": "#c9f1d0"
+      }
+    }
+  }
+}

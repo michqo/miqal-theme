@@ -11,4 +11,4 @@ for (const [name, content] of renderArtifacts(loadTokens())) {
     if (current !== content) throw new Error(`${name} is stale. Run npm run generate.`);
   } else writeFileSync(target, content);
 }
-console.log(check ? "Generated artifacts match canonical tokens." : "Generated core, optional layers, compatibility bundle, and design reference.");
+console.log(check ? "Generated artifacts match canonical tokens." : "Generated CSS, sRGB tokens, and design reference.");

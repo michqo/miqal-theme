@@ -1,5 +1,5 @@
 <!-- Generated from tokens.json. Do not edit. -->
-# Miqal foundation 0.2.0
+# Miqal foundation 0.3.0
 
 The approved portfolio is the visual reference: warm paper and ink, a teal
 identity, clear headings, compact utility interfaces, and a plain canvas.
@@ -14,7 +14,8 @@ Keep icons restrained and interactions stable. Main controls have at least
 Use whitespace for section hierarchy; avoid duplicate dividers. Borders can
 separate content, but essential input boundaries use the stronger input role.
 
-App identity swatches are decorative branding. Chart colors are categorical,
+App identity swatches are decorative branding unless an app opts in to its
+accent theme with `data-app`, which re-tints the interactive roles. Chart colors are categorical,
 not a guarantee that neighboring series can be distinguished by color alone.
 Use legends, labels, and line styles. Status meaning also needs text or icons.
 
@@ -70,11 +71,87 @@ Thin decorative dividers intentionally use a quieter border role.
 | `success-foreground` | `oklch(0.99 0.005 85)` | `#fdfcf8` | `oklch(0.19 0.008 65)` | `#161310` |
 | `warning-foreground` | `oklch(0.99 0.005 85)` | `#fdfcf8` | `oklch(0.19 0.008 65)` | `#161310` |
 | `info-foreground` | `oklch(0.99 0.005 85)` | `#fdfcf8` | `oklch(0.19 0.008 65)` | `#161310` |
+| `primary-hover` | `oklch(0.37 0.10 212)` | `#004c5e` | `oklch(0.78 0.12 212)` | `#40cbe4` |
+| `surface-subtle` | `oklch(0.94 0.013 85)` | `#efebe2` | `oklch(0.269 0 0)` | `#262626` |
+| `surface-hover` | `oklch(0.94 0.013 85)` | `#efebe2` | `oklch(0.274 0.006 286.033)` | `#27272a` |
+| `surface-selected` | `oklch(0.95 0.03 212)` | `#d9f4fa` | `oklch(0.28 0.05 212)` | `#002f37` |
+| `overlay` | `oklch(0.16 0.01 65 / 48%)` | `#100c09 / 48%` | `oklch(0.08 0.005 65 / 72%)` | `#020201 / 72%` |
+| `app-filevault` | `oklch(0.43 0.07 155)` | `#2d5b3f` | `oklch(0.75 0.10 150)` | `#7fc08c` |
+
+## App accent themes
+
+Set `data-app="<name>"` on `html`, `body`, or a product container to swap the
+teal identity for the app's own accent. Only `primary`, `primary-foreground`, `primary-hover`, `ring`, `accent`, `accent-foreground`
+change, together with the sidebar and selected-surface roles that alias them. Neutrals,
+status, and chart roles stay shared. Every app theme passes the same contrast contracts
+as the default palette in both modes. Works with `.dark` and `[data-theme="dark"]`.
+
+| App | Mode | `primary` | `primary-foreground` | `primary-hover` | `ring` | `accent` | `accent-foreground` |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `weather` | light | `#006166` | `#eafdfe` | `#004c50` | `#006166` | `#d8f5f6` | `#001718` |
+| `weather` | dark | `#53c1c7` | `#001113` | `#7cced2` | `#00858d` | `#003033` | `#b6f1f4` |
+| `subnify` | light | `#345f95` | `#f0f9ff` | `#264b7a` | `#345f95` | `#e1f0ff` | `#051223` |
+| `subnify` | dark | `#89b7f3` | `#000b1f` | `#a1c7f8` | `#3d73b6` | `#172a41` | `#cae7ff` |
+| `sleep` | light | `#6f4c87` | `#fdf5ff` | `#593b6f` | `#6f4c87` | `#f5e9fe` | `#170c1f` |
+| `sleep` | dark | `#c8a2e4` | `#12051a` | `#d4b6eb` | `#875ca5` | `#30223b` | `#f1daff` |
+| `obedy` | light | `#944812` | `#fff5ed` | `#7b3702` | `#944812` | `#ffe9dd` | `#1f0b02` |
+| `obedy` | dark | `#f5a06f` | `#1b0400` | `#fdb48c` | `#a85a28` | `#3c2111` | `#ffdac2` |
+| `filevault` | light | `#2d5b3f` | `#effdf3` | `#20462f` | `#2d5b3f` | `#e0f5e6` | `#021709` |
+| `filevault` | dark | `#7fc08c` | `#001002` | `#99cda3` | `#33854a` | `#15301b` | `#c9f1d0` |
+
+## Interface system (opt-in)
+
+Import `system.css` after Tailwind for core + motion + namespaced visual primitives.
+Importing core alone retains the existing foundation without styling controls.
+Shared CSS supplies appearance; apps retain accessible semantics and behavior.
+
+### Type scale
+
+| Role | Size | Line height | Weight | Tracking |
+| --- | --- | --- | --- | --- |
+| `caption` | 0.75rem | 1.5 | 400 | 0em |
+| `label` | 0.8125rem | 1.4 | 500 | 0em |
+| `body` | 0.875rem | 1.6 | 400 | 0em |
+| `body-lg` | 1rem | 1.6 | 400 | 0em |
+| `title` | 1.5rem | 1.3 | 600 | -0.025em |
+| `display` | 2.25rem | 1.15 | 600 | -0.035em |
+
+Use `--miqal-type-body` / `--miqal-leading-body` in CSS,
+`text-miqal-body` in Tailwind, or `miqal-text-body` with components.css.
+The spacing scale is a 0.25rem step, exposed as `--miqal-space-{1,2,3,4,5,6,8,10,12,16}`.
+Radii also have real runtime variables, `--miqal-radius-sm` through `--miqal-radius-4xl`.
+
+### Density, elevation and layering
+
+Comfortable controls: 2.75rem; rows: 3.5rem.
+Compact controls: 2.25rem; rows: 2.75rem.
+Set `data-density="compact"` on a product container. Nested comfortable regions can reset it.
+Coarse-pointer controls keep at least 2.75rem targets in both densities.
+
+Theme-aware shadows use `--miqal-shadow-sm/md/lg` and `shadow-miqal-sm/md/lg`.
+Layers use `--miqal-layer-base/sticky/dropdown/overlay/dialog/toast/tooltip`.
+Floating product content uses these roles rather than arbitrary escalating z-index values.
+
+### Primitives and states
+
+- `miqal-button` + `miqal-button-primary/secondary/ghost/danger`; optional `-small` or `-icon` size.
+- `miqal-input` supports native disabled and `aria-invalid` states.
+- `miqal-surface` supports `data-elevation="1|2"` and `data-selected="true"`.
+- `miqal-badge` supports `data-status="success|warning|info|danger"`.
+- `miqal-menu` styles real menuitem/separator roles, Radix highlight/disabled attributes, and `data-variant="danger"`.
+- `miqal-dialog` and `miqal-overlay` style native or library-managed dialogs; apps own positioning and focus management.
+
+Controls expose focus, hover, disabled, busy, invalid, coarse-pointer, forced-color, and reduced-motion states.
+Use real disabled attributes or implement aria-disabled behavior in the app; CSS does not block activation.
+Native semantics, labels, keyboard navigation, focus traps, and screen reader announcements remain app responsibilities.
+
+
 
 ## Ownership
 
-The package owns semantic colors, font roles, radii, focus, selection, and
-reduced-motion defaults. Apps own composition, density, responsive layout,
+The package owns semantic colors, type/spacing scales, radii, interaction states,
+density presets, elevation, layers, focus, selection, and reduced-motion defaults.
+Opt-in primitives style shared controls. Apps own composition, density choice, responsive layout,
 copy, sketches, navigation behavior, and domain visualization semantics.
 Optional canvas/motion layers add explicit opt-in effects. The legacy
 theme.css entry point remains decorative; migrated apps use core.css.

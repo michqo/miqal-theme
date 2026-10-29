@@ -13,9 +13,10 @@ try {
   const pkg = JSON.parse(readFileSync(join(dir,"package/package.json"),"utf8"));
   assert.equal(pkg.version, tokens.version);
   assert.equal(pkg.name,"@miqal/theme");
-  assert.deepEqual(Object.keys(pkg.exports).sort(), ["./canvas.css","./core.css","./motion.css","./theme.css","./tokens.json"]);
+  assert.deepEqual(Object.keys(pkg.exports).sort(), ["./canvas.css","./components.css","./core.css","./motion.css","./system.css","./theme.css","./tokens.json","./tokens.srgb.json"]);
   for (const target of Object.values(pkg.exports)) assert.ok(existsSync(join(dir,"package",target)), `Missing export: ${target}`);
   assert.ok(archive.files.every(({path}) => !/^(node_modules|tests|examples|scripts|docs)\//.test(path)), "Development files leaked into the package");
   assert.equal(readFileSync(join(dir,"package/core.css"),"utf8"), readFileSync(new URL("core.css",root),"utf8"));
+  assert.equal(readFileSync(join(dir,"package/tokens.srgb.json"),"utf8"), readFileSync(new URL("tokens.srgb.json",root),"utf8"));
   console.log(`Verified ${archive.filename}: public exports exist, generated output matches, development files excluded.`);
 } finally { rmSync(dir,{recursive:true,force:true}); }

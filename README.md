@@ -1,13 +1,15 @@
 # @miqal/theme
 
-A CSS foundation for Miqal's Next.js and SvelteKit utilities: warm paper and ink,
-a teal identity, Geist font roles, accessible controls, and a plain canvas.
-The published 0.2.0 release follows the portfolio approved on 2026-10-03.
+A shared CSS design system for Miqal's Next.js and SvelteKit utilities: warm
+paper and ink, a teal identity, Geist font roles, and a plain canvas. Version 0.3.0
+adds an opt-in interface layer and per-app accents on top of the foundation
+approved on 2026-10-03. Existing semantic colors remain unchanged.
 
 ## Install and import
 
-Install the verified registry release: `pnpm add @miqal/theme@0.2.0 --save-exact`.
-For future local changes, validate a packed candidate before publishing it.
+```sh
+pnpm add @miqal/theme@0.3.0
+```
 
 ```css
 /* app/globals.css (Next.js) or src/app.css (SvelteKit) */
@@ -18,6 +20,61 @@ For future local changes, validate a packed candidate before publishing it.
 Core exports semantic Tailwind v4 colors, radius aliases, font roles, visible
 focus, selection, and reduced-motion defaults. It adds no gradients, dot grid,
 blinking caret, font download, or framework runtime component.
+
+## Advanced interface layer
+
+For new applications such as FileVault, opt in to the complete system:
+
+```css
+@import "tailwindcss";
+@import "@miqal/theme/system.css";
+```
+
+`system.css` bundles core, motion, and `components.css`. The component layer is
+namespaced and framework independent; importing core alone does not style
+buttons, fields, menus, or dialogs.
+
+```html
+<section data-density="compact" class="miqal-surface" data-elevation="1">
+  <h2 class="miqal-text-title">Your workspace</h2>
+  <label for="folder">Folder name</label>
+  <input id="folder" class="miqal-input" placeholder="Project notes" />
+  <button class="miqal-button miqal-button-primary">Create folder</button>
+  <span class="miqal-badge" data-status="success">Saved</span>
+</section>
+```
+
+Shared foundations now include:
+
+- Six type roles with sizes, line heights, weights, and tracking; use
+  `text-miqal-body` in Tailwind or `--miqal-type-body` in custom CSS.
+- A 4px spacing scale, runtime radius variables, light/dark elevation tokens,
+  and ordered sticky/menu/overlay/dialog/toast/tooltip layers.
+- Comfortable and compact density settings with 44px coarse-pointer targets.
+- Hover/selected surfaces and primary hover colors with contrast contracts.
+- Buttons, inputs, surfaces, badges, menus, dialogs, and overlays with focus,
+  disabled, busy, invalid, forced-color, and reduced-motion support.
+
+### App accents
+
+Each app can use its own identity color instead of the shared teal for primary
+actions, focus rings, and selection, while neutrals and status colors stay shared:
+
+```html
+<html lang="en" data-app="subnify">
+```
+
+Available apps are `weather`, `subnify`, `sleep`, `obedy`, and `filevault`. The
+attribute also works on any container and combines with `.dark` or
+`[data-theme="dark"]`. Without it, apps keep the default Miqal teal. Add a new app
+by giving it an `app-<name>` swatch and an `appThemes.<name>` entry in
+`tokens.json`; generation fails if any of its colors breaks a contrast contract.
+
+Use real native or library-managed semantics. Radix remains responsible for
+focus trapping, keyboard navigation, and dialog/menu behavior in FileVault.
+CSS `aria-disabled` styling does not prevent activation; apps must implement
+that behavior. Both `.dark` and `[data-theme="dark"]` select the dark palette.
+See the generated [DESIGN.md](DESIGN.md) for the complete token/primitive API.
 
 ## Fonts
 
@@ -46,6 +103,8 @@ html; core does not persist preferences or implement a toggle.
 - `canvas.css`: explicit `.miqal-canvas` / `.miqal-canvas-quiet` treatments;
   importing this file alone does not decorate body.
 - `motion.css`: duration/easing tokens and transition utilities.
+- `components.css`: opt-in visual primitives; import core first. Motion is
+  optional and has fallbacks. `system.css` is the convenient complete bundle.
 - `theme.css`: compatibility bundle with legacy global canvas, animation
   utilities, and Inter / JetBrains Mono bindings. Use core.css when migrating
   to the new design. Existing 0.1.x consumers remain on their installed version.
@@ -55,15 +114,32 @@ does not replace accessible control semantics or product-specific layouts.
 
 ## Tokens and ownership
 
-`tokens.json` is the only hand-edited source of shared token values. CSS and
+`tokens.json` is the only hand-edited source of shared token values. CSS, sRGB tokens, and
 [DESIGN.md](DESIGN.md) are generated and checked in; consumers need no generation
 step. Package and token versions must match. Canonical colors use OKLCH, and hex
 approximations are generated through sRGB conversion rather than maintained by
 hand. Essential form boundaries use the stronger input role; decorative
 dividers use border. App identity colors do not encode status meaning.
 
-Products retain their composition, density, copy, navigation, and visualizations.
+Products retain their composition, density choice, copy, navigation, and visualizations.
 The portfolio sketch and contact treatment are local design, not global widgets.
+
+### Colors for image renderers
+
+For renderers that require sRGB, import the generated JSON export:
+
+```ts
+import tokens from "@miqal/theme/tokens.srgb.json";
+
+const background = tokens.colors.light.background; // #fbf7f1
+const border = tokens.colors.dark.border; // rgba(255, 255, 255, 0.1)
+```
+
+This export includes every semantic color in both themes, with aliases resolved.
+Opaque colors use hex; translucent colors use RGBA to preserve their opacity.
+Conversion and sRGB clipping happen in this package's generator. Consumers need
+no color library, and website CSS continues to use the canonical OKLCH values.
+Do not edit `tokens.srgb.json` directly; `generate:check` detects drift.
 
 ## Development and verification
 

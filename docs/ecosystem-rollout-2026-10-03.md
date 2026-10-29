@@ -68,3 +68,11 @@ before building/deploying it; local preview values are documented only for
 verification and are not production settings. Future visual changes should
 start in canonical tokens and their contrast tests, then be reviewed in the
 apps that use them.
+
+## Weather follow-up · 2026-10-11
+
+Weather Station now uses `@miqal/theme@0.2.1` and a rebuilt overview/history
+workspace, read-only demo, scoped data/session state, and updated portfolio
+preview. Its local checks and remaining live-provider/deployment boundaries are
+recorded in [Weather verification](../../ms_web/docs/verification.md). This
+follow-up does not change the shared foundation or deploy any app.
